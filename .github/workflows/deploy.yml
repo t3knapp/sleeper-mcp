@@ -25,8 +25,19 @@ jobs:
       - name: Install Wrangler
         run: npm install --no-audit --no-fund
       - name: Deploy Worker
-        run: npx wrangler deploy
+        run: |
+          set -o pipefail
+          npx wrangler deploy 2>&1 | tee deploy.log || {
+            # Surface the error as annotations (readable from the API without log access).
+            grep -v '^\s*$' deploy.log | tail -n 15 | sed 's/^/::error title=wrangler deploy::/'
+            exit 1
+          }
       - name: Build player index
         run: node scripts/build-players.mjs players.json
       - name: Upload player index to KV
-        run: npx wrangler kv key put players --path players.json --binding CACHE --remote
+        run: |
+          set -o pipefail
+          npx wrangler kv key put players --path players.json --binding CACHE --remote 2>&1 | tee kv.log || {
+            grep -v '^\s*$' kv.log | tail -n 15 | sed 's/^/::error title=kv put::/'
+            exit 1
+          }
