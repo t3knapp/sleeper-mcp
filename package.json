@@ -1,0 +1,15 @@
+{
+  "name": "sleeper-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only MCP connector for Sleeper fantasy football leagues, on Cloudflare Workers",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build-players": "node scripts/build-players.mjs players.json",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

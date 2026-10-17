@@ -1,0 +1,12 @@
+name = "sleeper-mcp"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Holds the slim player index ("players"), refreshed daily by .github/workflows/refresh-players.yml
+[[kv_namespaces]]
+binding = "CACHE"
+id = "e367d295de0d4d2e88525cb4b1a6274c"
+
+[observability]
+enabled = true

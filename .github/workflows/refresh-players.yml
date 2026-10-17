@@ -1,0 +1,21 @@
+name: Refresh player index
+
+on:
+  schedule:
+    - cron: "17 11 * * *" # daily, ~4 AM Pacific
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: node scripts/build-players.mjs players.json
+      - run: npx wrangler kv key put players --path players.json --binding CACHE --remote

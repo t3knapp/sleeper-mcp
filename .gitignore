@@ -1,0 +1,4 @@
+node_modules/
+.wrangler/
+players.json
+package-lock.json
